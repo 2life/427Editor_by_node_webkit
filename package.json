@@ -1,0 +1,19 @@
+{
+	"name" : "helloworld",
+	"main" : "_my_project_/index.html",
+  "nodejs":true,
+  "window": {
+    "title": "427Editor",
+    "toolbar": false, 
+    "width": 800, 
+    "height": 600,
+    "resizable":false,
+    "show_in_taskbar":true,
+    "frame":true,
+    "kiosk":false,
+    "icon": "test.png"
+  },
+  "webkit":{
+    "plugin":true
+  }
+}

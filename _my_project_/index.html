@@ -1,0 +1,91 @@
+<html>
+<head>
+    <title id="title">427Editor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+    <div id="log"></div>
+
+    选择要打开的文件：<input type="file" id="f"/>
+    <br>
+    <textarea id="t" style="width:100%;height:400px;"></textarea>
+    <br>
+    <input type="button" id="w" value="写入文件" onclick="save()" style="display:none"/>
+    <br>
+    保存为文件：<input type="file" id="s" value="保存文件" nwsaveas/>
+
+
+
+    <script src="js/_my_common_.js"></script>
+    <script>
+    var path = null;
+
+    var fs = require("fs");
+
+    var gui = require("nw.gui");
+    var win = gui.Window.get();
+    var app = gui.App;
+    var argv = (app.argv);
+
+    if(argv.length == 1){
+        openFile(argv[0]);
+    }
+
+    //打开文件的工作方法
+    function openFile(filePath){
+        setPath(filePath);
+        fs.readFile(path, "UTF-8", function(err, data){
+            if(err){
+                log("打开失败");
+            }else{
+                $("t").value = data;
+                $("w").style.display = "";
+            }
+        });
+    }
+
+    //打开文件
+    $("f").addEventListener("change", function(e){
+        if(this.value){
+            openFile(this.value);
+        }
+    }, false);
+
+    //写入文件
+    function save(){
+        var content = $("t").value;
+        fs.writeFile(path, content, function(err){
+            if(err){
+                log("写入失败");
+            }else{
+                log("写入成功");
+            }
+        });
+    }
+
+    //存储为新文件
+    $("s").addEventListener("change", function(e){
+        if(this.value){
+            setPath(this.value);
+            var content = $("t").value;
+            fs.writeFile(path, content, function(err){
+                if(err){
+                    log("保存失败");
+                }else{
+                    log("保存成功");
+                }
+            });
+        }
+    });
+
+    function setPath(p){
+        path = p;
+        $("title").innerHTML = p + " - 427Editor";
+
+        //使标题改变生效，解决奇怪的问题
+        win.hide();
+        win.show();
+    }
+    </script> 
+</body>
+</html>
